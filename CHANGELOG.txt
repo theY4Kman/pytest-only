@@ -1,0 +1,4 @@
+1.1.0 (2017/03/28)
+------------------
+
+ - Call pytest_deselected with deselected tests
