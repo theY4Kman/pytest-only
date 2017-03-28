@@ -19,7 +19,7 @@ def readme():
 setup(
     name='pytest-only',
     url='https://github.com/theY4Kman/pytest-only',
-    version='1.0.1',
+    version='1.1.0',
     description='Use @pytest.mark.only to run a single test',
     long_description=readme(),
     author='Zach "theY4Kman" Kanzler',
