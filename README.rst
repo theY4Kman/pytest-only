@@ -114,3 +114,23 @@ Or use it on modules
     test_example.py::test_that_will_run PASSED
 
     =========================== 1 passed in 0.00 seconds ===========================
+
+
+
+Disable for single test run
+---------------------------
+
+To run all the tests, regardless of whether ``@pytest.mark.only`` is used, pass
+the ``--no-only`` flag to pytest:
+
+.. code-block:: bash
+
+    $ py.test --no-only
+
+
+If ``--no-only`` has already been passed (perhaps by way of ``addopts`` in
+*pytest.ini*), use the ``--only`` flag to re-enable it:
+
+.. code-block:: bash
+
+    $ py.test --no-only --only

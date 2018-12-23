@@ -102,3 +102,49 @@ def test_file(testdir):
     assert_test_did_run(res, 'test_should_run')
     assert_test_did_run(res, 'test_should_also_run')
     assert_test_did_not_run(res, 'test_should_not_run')
+
+
+def test_no_only_cmdline_option(testdir):
+    file = testdir.makepyfile('''
+        import pytest
+
+        def test_should_run_as_well():
+            pass
+
+        @pytest.mark.only
+        def test_should_run():
+            pass
+
+        def test_should_also_run():
+            pass
+    ''')
+    res = testdir.runpytest_inprocess(file, '--verbose', '--no-only')
+    outcomes = res.parseoutcomes()
+    assert 'passed' in outcomes, 'Tests did not run successfully'
+
+    assert_test_did_run(res, 'test_should_run')
+    assert_test_did_run(res, 'test_should_run_as_well')
+    assert_test_did_run(res, 'test_should_also_run')
+
+
+def test_negating_cmdline_options(testdir):
+    file = testdir.makepyfile('''
+        import pytest
+
+        def test_should_not_run():
+            pass
+
+        @pytest.mark.only
+        def test_should_run():
+            pass
+
+        def test_should_also_not_run():
+            pass
+    ''')
+    res = testdir.runpytest_inprocess(file, '--verbose', '--no-only', '--only')
+    outcomes = res.parseoutcomes()
+    assert 'passed' in outcomes, 'Tests did not run successfully'
+
+    assert_test_did_run(res, 'test_should_run')
+    assert_test_did_not_run(res, 'test_should_also_not_run')
+    assert_test_did_not_run(res, 'test_should_not_run')
