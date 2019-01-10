@@ -10,7 +10,9 @@ pytest_plugins = 'pytester'
 def setup_syspath(testdir):
     repo_dir = os.path.dirname(os.path.dirname(__file__))
     testdir.syspathinsert(repo_dir)
-    testdir.makeconftest('pytest_plugins = "pytest_only.plugin"')
+    testdir.makeconftest('pytest_plugins = ["pytest_only.plugin"]')
+    testdir.makeini('[pytest]\n'
+                    'addopts = -p no:only')
 
 
 def assert_test_did_run(res, name):
@@ -36,7 +38,7 @@ def test_function(testdir):
         def test_should_also_not_run():
             pass
     ''')
-    res = testdir.runpytest_inprocess(file, '--verbose')
+    res = testdir.runpytest(file, '--verbose')
     outcomes = res.parseoutcomes()
     assert 'passed' in outcomes, 'Tests did not run successfully'
     assert outcomes['passed'] == 1, 'Incorrect number of tests passed'
@@ -65,7 +67,7 @@ def test_class(testdir):
             def test_should_also_not_run(self):
                 pass
     ''')
-    res = testdir.runpytest_inprocess(file, '--verbose')
+    res = testdir.runpytest(file, '--verbose')
     outcomes = res.parseoutcomes()
     assert 'passed' in outcomes, 'Tests did not run successfully'
     assert outcomes['passed'] == 2, 'Incorrect number of tests passed'
@@ -94,7 +96,7 @@ def test_file(testdir):
             pass
     ''')
 
-    res = testdir.runpytest_inprocess('--verbose', should_run, should_not_run)
+    res = testdir.runpytest('--verbose', should_run, should_not_run)
     outcomes = res.parseoutcomes()
     assert 'passed' in outcomes, 'Tests did not run successfully'
     assert outcomes['passed'] == 2, 'Incorrect number of tests passed'
@@ -118,7 +120,7 @@ def test_no_only_cmdline_option(testdir):
         def test_should_also_run():
             pass
     ''')
-    res = testdir.runpytest_inprocess(file, '--verbose', '--no-only')
+    res = testdir.runpytest(file, '--verbose', '--no-only')
     outcomes = res.parseoutcomes()
     assert 'passed' in outcomes, 'Tests did not run successfully'
 
@@ -141,7 +143,7 @@ def test_negating_cmdline_options(testdir):
         def test_should_also_not_run():
             pass
     ''')
-    res = testdir.runpytest_inprocess(file, '--verbose', '--no-only', '--only')
+    res = testdir.runpytest(file, '--verbose', '--no-only', '--only')
     outcomes = res.parseoutcomes()
     assert 'passed' in outcomes, 'Tests did not run successfully'
 

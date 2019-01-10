@@ -1,3 +1,6 @@
+from .compat import get_closest_marker
+
+
 def pytest_addoption(parser):
     parser.addoption('--only', dest='enable_only',
                      default=True, action='store_true',
@@ -14,7 +17,7 @@ def pytest_collection_modifyitems(config, items):
 
     only, other = [], []
     for item in items:
-        l = only if item.get_marker('only') else other
+        l = only if get_closest_marker(item, 'only') else other
         l.append(item)
 
     if only:
