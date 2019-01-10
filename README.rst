@@ -134,3 +134,25 @@ If ``--no-only`` has already been passed (perhaps by way of ``addopts`` in
 .. code-block:: bash
 
     $ py.test --no-only --only
+
+
+Development
+-----------
+
+1. Install the test/dev requirements
+
+    .. code-block:: bash
+
+        $ pip install -r dev-requirements.txt
+
+2. Run the tests
+
+    .. code-block:: bash
+
+        $ py.test
+
+3. Run the tests on all currently-supported platforms
+
+    .. code-block:: bash
+
+        $ tox
