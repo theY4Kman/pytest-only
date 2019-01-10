@@ -14,7 +14,7 @@ def pytest_collection_modifyitems(config, items):
 
     only, other = [], []
     for item in items:
-        l = only if item.get_marker('only') else other
+        l = only if item.get_closest_marker('only') else other
         l.append(item)
 
     if only:

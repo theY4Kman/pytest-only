@@ -1,3 +1,9 @@
+UNRELEASED
+----------
+
+ - Switch to Node.get_closest_marker, Node.get_marker was removed in pytest 4.1.0 (requires pytest >= 3.6)
+
+
 1.2.0 (2018/12/23)
 ------------------
 
