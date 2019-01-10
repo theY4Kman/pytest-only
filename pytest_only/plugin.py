@@ -8,13 +8,25 @@ def pytest_addoption(parser):
                      help='Disable --only filtering')
 
 
+def get_closest_marker(item):
+    # get_closest_marker added in ptest 3.6
+    # https://docs.pytest.org/en/latest/changelog.html#pytest-3-6-0-2018-05-23
+    # get_marker removed in pytest 4.1
+    # https://docs.pytest.org/en/latest/changelog.html#pytest-4-1-0-2019-01-05
+    if hasattr(item, 'get_closest_marker'):
+        fn = 'get_closest_marker'
+    else:
+        fn = 'get_marker'
+    return getattr(item, fn)('only')
+
+
 def pytest_collection_modifyitems(config, items):
     if not config.getoption('--only'):
         return
 
     only, other = [], []
     for item in items:
-        l = only if item.get_marker('only') else other
+        l = only if get_closest_marker(item) else other
         l.append(item)
 
     if only:
