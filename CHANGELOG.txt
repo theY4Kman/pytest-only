@@ -2,7 +2,7 @@ UNRELEASED (TBA)
 ----------------
 
 
-1.2.1 (2019/01/19)
+1.2.1 (2019/01/09)
 ------------------
 
  - Fix get_marker usage for compatibility with pytest 4.1.0 (see https://github.com/pytest-dev/pytest/issues/4546)
