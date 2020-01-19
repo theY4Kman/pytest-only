@@ -9,6 +9,12 @@ def pytest_addoption(parser):
     parser.addoption('--no-only', dest='enable_only',
                      action='store_false',
                      help='Disable --only filtering')
+    
+
+def pytest_configure(config):
+    config.addinivalue_line(
+        "markers", "only: normal runs will execute only marked tests"
+    )    
 
 
 def pytest_collection_modifyitems(config, items):
