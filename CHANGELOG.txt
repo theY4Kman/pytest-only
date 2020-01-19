@@ -1,6 +1,11 @@
 UNRELEASED (TBA)
 ----------------
 
+1.2.2 (2020/01/18)
+------------------
+
+ - Register the `only` mark to avoid warning messages emitted since 4.5.0 (thank you, @nicoddemus – https://github.com/theY4Kman/pytest-only/pull/8)
+
 
 1.2.1 (2019/01/09)
 ------------------
