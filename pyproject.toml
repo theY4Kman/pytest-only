@@ -20,11 +20,13 @@ classifiers=[
 ]
 
 [tool.poetry.dependencies]
-python = '>=3.5'
+python = '>=3.6.2'
 pytest = '>=3.6'
 
 [tool.poetry.dev-dependencies]
 tox = '^3.25.0'
+pylint = "^2.13.9"
+pytest-pylint = "^0.18.0"
 
 [tool.poetry.plugins."pytest11"]
 only = "pytest_only.plugin"
