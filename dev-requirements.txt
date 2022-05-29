@@ -1,3 +1,0 @@
--r requirements.txt
-
-tox==3.6.1

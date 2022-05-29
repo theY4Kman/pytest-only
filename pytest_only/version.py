@@ -1,2 +1,6 @@
-VERSION = (1, 2, 2)
-__version__ = '.'.join(str(n) for n in VERSION)
+import pkg_resources
+
+try:
+    __version__ = pkg_resources.get_distribution('pytest-only').version
+except pkg_resources.DistributionNotFound:
+    __version__ = 'dev'
