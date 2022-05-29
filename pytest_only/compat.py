@@ -7,10 +7,13 @@ except ImportError:
 
 
 if hasattr(Node, 'get_closest_marker'):
-    get_closest_marker = lambda item, *a, **kw: item.get_closest_marker(*a, **kw)
+    def get_closest_marker(item: Node, *args, **kwargs):
+        return item.get_closest_marker(*args, **kwargs)
 elif hasattr(Node, 'get_marker'):
-    get_closest_marker = lambda item, *a, **kw: item.get_marker(*a, **kw)
+    def get_closest_marker(item: Node, *args, **kwargs):
+        return item.get_marker(*args, **kwargs)
 else:
     raise RuntimeError(
         'Unable to determine get_closest_marker alternative '
-        'for pytest version {}'.format(pytest.__version__))
+        'for pytest version {}'.format(pytest.__version__)
+    )
