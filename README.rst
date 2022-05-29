@@ -139,7 +139,7 @@ If ``--no-only`` has already been passed (perhaps by way of ``addopts`` in
 Pylint checker
 --------------
 
-If you use pylint you can help avoid commiting stray mark.onlys. Enable the pylint checker in your plugins and enabled the `unexpected-focused` rule.
+If you use pylint, you can avoid committing stray `only` marks with the bundled plugin. Just enable the pylint checker in your plugins and enable the `unexpected-focused` rule.
 
 .. code-block:: ini
     [MASTER]
