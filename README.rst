@@ -158,7 +158,7 @@ If you use pylint you can help avoid commiting stray mark.onlys. Enable the pyli
 
     $ pylint test_ninja.py
     ************* Module mymain
-    test_ninja.py:3:0: W1650: Unexpected focused test using pytest.mark.only (unexpected-focused-test)
+    test_ninja.py:3:0: W1650: Unexpected focused test(s) using pytest.mark.only: def test_ninja (unexpected-focused)
 
 Development
 -----------
