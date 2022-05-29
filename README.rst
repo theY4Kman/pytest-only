@@ -143,7 +143,7 @@ If you use pylint you can help avoid commiting stray mark.onlys. Enable the pyli
 
 .. code-block:: ini
     [MASTER]
-    load_plugins=pytest_only.checker
+    load-plugins=pytest_only.ext.pylint
 
     [MESSAGES CONTROL]
     enable=unexpected-focused
