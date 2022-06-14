@@ -166,20 +166,20 @@ If you use pylint, you can avoid committing stray `only` marks with the bundled 
 Development
 -----------
 
-1. Install the test/dev requirements
+1. Install the test/dev requirements using `Poetry <https://python-poetry.org/>`_
 
     .. code-block:: bash
 
-        $ pip install -r dev-requirements.txt
+        poetry install
 
 2. Run the tests
 
     .. code-block:: bash
 
-        $ py.test
+        py.test
 
 3. Run the tests on all currently-supported platforms
 
     .. code-block:: bash
 
-        $ tox
+        tox
