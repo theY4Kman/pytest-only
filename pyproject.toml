@@ -22,7 +22,7 @@ classifiers=[
 [tool.poetry.dependencies]
 python = '>=3.6.2,<4'
 pytest = [
-    {version = '<7.1', python = '^3.6'},
+    {version = '<7.1', python = '<= 3.6'},
     {version = '>=7.1', python = '^3.7'},
 ]
 
