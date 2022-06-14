@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ## [Unreleased]
+### Added
+ - Added [pylint](https://pylint.pycqa.org) plugin to detect `only` marks before they get committed (thank you, [@nikolaik](https://github.com/nikolaik) — [GH#10](https://github.com/theY4Kman/pytest-only/pull/10))
+
 ### Changed
  - Remove support for Python 2.7
 
