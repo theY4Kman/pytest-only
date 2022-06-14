@@ -136,6 +136,30 @@ If ``--no-only`` has already been passed (perhaps by way of ``addopts`` in
     $ py.test --no-only --only
 
 
+Pylint checker
+--------------
+
+If you use pylint, you can avoid committing stray `only` marks with the bundled plugin. Just enable the pylint checker in your plugins and enable the `unexpected-focused` rule.
+
+.. code-block:: ini
+    [MASTER]
+    load-plugins=pytest_only.ext.pylint
+
+    [MESSAGES CONTROL]
+    enable=unexpected-focused
+
+.. code-block:: console
+    $ cat test_ninja.py
+    import pytest
+
+    @pytest.mark.only
+    def test_ninja():
+        pass
+
+    $ pylint test_ninja.py
+    ************* Module mymain
+    test_ninja.py:3:0: W1650: Unexpected focused test(s) using pytest.mark.only: def test_ninja (unexpected-focused)
+
 Development
 -----------
 
