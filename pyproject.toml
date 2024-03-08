@@ -20,7 +20,7 @@ classifiers=[
 ]
 
 [tool.poetry.dependencies]
-python = '>=3.6.2,<4'
+python = '>=3.7.2,<4'
 pytest = [
     {version = '<7.1', python = '<= 3.6'},
     {version = '>=7.1', python = '^3.7'},
@@ -33,7 +33,7 @@ flake8 = [
 ]
 pylint = "^2.13.9"
 pytest-common-subject = "^1.0.6"
-pytest-pylint = "^0.18.0"
+pytest-pylint = "^0.21.0"
 tox = '^3.25.0'
 
 [tool.poetry.plugins."pytest11"]
