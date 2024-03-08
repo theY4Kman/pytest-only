@@ -6,6 +6,9 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ## [Unreleased]
+
+
+## [2.1.0] — 2024-03-08
 ### Added
  - Add [flake8](https://github.com/PyCQA/flake8) plugin to detect `only` marks before they get committed (see [GH#11](https://github.com/theY4Kman/pytest-only/issues/11))
 
