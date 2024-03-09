@@ -2,7 +2,7 @@ import ast
 from typing import Callable
 
 import pytest
-from pytest_lambda import lambda_fixture, static_fixture
+from pytest_lambda import static_fixture
 
 from pytest_only.ext.flake8 import PytestOnlyMarkVisitor
 from .base_lint import BaseLintTest

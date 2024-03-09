@@ -1,7 +1,7 @@
 from typing import Callable
 
 import pytest
-from pytest_lambda import lambda_fixture, static_fixture
+from pytest_lambda import static_fixture
 
 from .base_lint import BaseLintTest
 

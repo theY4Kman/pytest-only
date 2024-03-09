@@ -121,7 +121,7 @@ class BaseLintTest(CommonSubjectTestMixin):
                     import pytest
 
                     class TestMyStuff:
-                        pytestmark, stuff = {pytestmark_decl}, 123
+                        pytest._notreal, pytestmark, stuff = 'abc', {pytestmark_decl}, 123
 
                         def test_stuff(self):
                             pass
@@ -131,6 +131,8 @@ class BaseLintTest(CommonSubjectTestMixin):
             # language=py
             source = static_fixture('''
                 class TestMyStuff:
+                    apples = 'pears'
+
                     def test_stuff(self):
                         pass
             ''')
@@ -157,7 +159,7 @@ class BaseLintTest(CommonSubjectTestMixin):
                 source = lambda_fixture(lambda pytestmark_decl: f'''
                     import pytest
 
-                    pytestmark, stuff = {pytestmark_decl}, 123
+                    pytest._notreal, pytestmark, stuff = 'abc', {pytestmark_decl}, 123
 
                     class TestMyStuff:
                         def test_stuff(self):
@@ -174,3 +176,27 @@ class BaseLintTest(CommonSubjectTestMixin):
                     def test_stuff(self):
                         pass
             ''')
+
+    class CaseUnrelated(DoesNotIncludeUnexpectedFocused):
+        # language=py
+        source = static_fixture('''
+            # Ensure proper handling of module-level assignments
+            d = dict()
+            d['a'] = 1
+            d |= {}
+            d.keys = lambda x: x
+
+            # Unpacking assignments of all kinds should not cause errors
+            a, b, c = 1, 2, 3
+            a, *b, c = 1, 2, 3, 4, 5
+            a, *b, c = range(3)
+            a, b, c = range(3)
+            [a, b, c] = range(3)
+
+            # Decorators of all kinds should not cause errors
+            @staticmethod
+            @a.b.c
+            @a.b.c()
+            def test_stuff():
+                pass
+        ''')

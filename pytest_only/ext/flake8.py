@@ -108,18 +108,20 @@ def iter_only_mark_pytestmarks(
             yield elt
 
 
-def get_pytestmark_assign_value(stmt: ast.Assign) -> Optional[ast.expr]:
+def get_pytestmark_assign_value(stmt: ast.stmt) -> Optional[ast.expr]:
     if isinstance(stmt, ast.Assign):
         if len(stmt.targets) == 1:
             if hasattr(stmt.targets[0], 'elts'):
-                values = stmt.value.elts
                 targets = stmt.targets[0].elts
+                values = getattr(stmt.value, 'elts', None)
+                if values is None:
+                    values = (stmt.value,) * len(targets)
             else:
-                values = (stmt.value,)
                 targets = stmt.targets
+                values = (stmt.value,)
         else:
             raise AssertionError('when does this happen?')
 
         for target, value in zip(targets, values):
-            if target.id == 'pytestmark':
+            if isinstance(target, ast.Name) and target.id == 'pytestmark':
                 return value
