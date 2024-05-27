@@ -6,6 +6,10 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ## [Unreleased]
+### Changed
+ - Drop support for Python 3.7 (now EOL)
+ - Add support for pytest versions 8.1 and 8.2
+ - Alter pytest version pin to disallow 9.x+ versions (to prevent unforeseen incompatibilities)
 
 
 ## [2.1.1] — 2024-03-09

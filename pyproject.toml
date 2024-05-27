@@ -20,15 +20,12 @@ classifiers=[
 ]
 
 [tool.poetry.dependencies]
-python = '>=3.7.2,<4'
-pytest = [
-    {version = '<7.1', python = '<= 3.6'},
-    {version = '>=7.1', python = '^3.7'},
-]
+python = '^3.8'
+pytest = '>=3.6.0,<9'
 
 [tool.poetry.group.dev.dependencies]
 flake8 = [
-    {version = '5.0.4', python = '>=3.7,<3.8.1'},
+    {version = '5.0.4', python = '>=3.8,<3.8.1'},
     {version = '^7.0.0', python = '>=3.8.1'},
 ]
 pylint = "^2.13.9"
