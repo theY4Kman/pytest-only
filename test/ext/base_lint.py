@@ -169,6 +169,21 @@ class BaseLintTest(CommonSubjectTestMixin):
                         pass
                 ''')
 
+            class CaseChainedAssign(IncludesUnexpectedFocused):
+                # language=py
+                source = lambda_fixture(lambda pytestmark_decl: f'''
+                    import pytest
+
+                    pytestmark = stuff = {pytestmark_decl}
+
+                    class TestMyStuff:
+                        def test_stuff(self):
+                            pass
+
+                    def test_other_stuff():
+                        pass
+                ''')
+
         class ContextWithoutOnlyMark(DoesNotIncludeUnexpectedFocused):
             # language=py
             source = static_fixture('''
@@ -192,6 +207,9 @@ class BaseLintTest(CommonSubjectTestMixin):
             a, *b, c = range(3)
             a, b, c = range(3)
             [a, b, c] = range(3)
+            
+            # Chained assignment should not cause errors
+            a = b = 3
 
             # Decorators of all kinds should not cause errors
             @staticmethod

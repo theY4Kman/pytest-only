@@ -110,7 +110,7 @@ def iter_only_mark_pytestmarks(
 
 def get_pytestmark_assign_value(stmt: ast.stmt) -> Optional[ast.expr]:
     if isinstance(stmt, ast.Assign):
-        if len(stmt.targets) == 1:
+        if len(stmt.targets) >= 1:
             if hasattr(stmt.targets[0], 'elts'):
                 targets = stmt.targets[0].elts
                 values = getattr(stmt.value, 'elts', None)
