@@ -243,6 +243,10 @@ class BaseLintTest(CommonSubjectTestMixin):
             
             # Chained assignment should not cause errors
             a = b = 3
+            a = b, c = (0, 1)
+            a = b, *c = (0, 1)
+            a = [b, c] = (0, 1)
+            a = [b, [c, d]], (0, (1, 2))
 
             # Decorators of all kinds should not cause errors
             @staticmethod
