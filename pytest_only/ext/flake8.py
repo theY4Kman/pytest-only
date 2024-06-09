@@ -110,18 +110,21 @@ def iter_only_mark_pytestmarks(
 
 def get_pytestmark_assign_value(stmt: ast.stmt) -> Optional[ast.expr]:
     if isinstance(stmt, ast.Assign):
-        if len(stmt.targets) >= 1:
-            if hasattr(stmt.targets[0], 'elts'):
-                targets = stmt.targets[0].elts
-                values = getattr(stmt.value, 'elts', None)
-                if values is None:
-                    values = (stmt.value,) * len(targets)
-            else:
-                targets = stmt.targets
-                values = (stmt.value,)
-        else:
-            raise AssertionError('when does this happen?')
-
-        for target, value in zip(targets, values):
+        for target, value in iter_assign_targets_values(stmt.targets, stmt.value):
             if isinstance(target, ast.Name) and target.id == 'pytestmark':
                 return value
+
+
+def iter_assign_targets_values(
+    targets: List[ast.expr],
+    value: Union[ast.expr, ast.List],
+) -> Tuple[ast.expr, Union[ast.expr, ast.List]]:
+    for target in targets:
+        if hasattr(target, "elts"):
+            if hasattr(value, "elts"):
+                for nested_target, nested_value in zip(target.elts, value.elts):
+                    yield from iter_assign_targets_values([nested_target], nested_value)
+            else:
+                pass  # This is not valid python, cannot unpack non-iterable
+        else:
+            yield target, value

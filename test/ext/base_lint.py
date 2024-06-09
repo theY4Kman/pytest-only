@@ -127,15 +127,28 @@ class BaseLintTest(CommonSubjectTestMixin):
                             pass
                 ''')
 
-        class ContextWithoutOnlyMark(DoesNotIncludeUnexpectedFocused):
-            # language=py
-            source = static_fixture('''
-                class TestMyStuff:
-                    apples = 'pears'
+        class ContextWithoutOnlyMark:
+            class CaseNormal(DoesNotIncludeUnexpectedFocused):
+                # language=py
+                source = static_fixture('''
+                    class TestMyStuff:
+                        apples = 'pears'
+    
+                        def test_stuff(self):
+                            pass
+                ''')
 
-                    def test_stuff(self):
-                        pass
-            ''')
+            class CaseOnlyMarkUnpackAssignOther(DoesNotIncludeUnexpectedFocused):
+                # language=py
+                source = static_fixture(
+                    '''
+                    class TestMyStuff:
+                        pytestmark, pytest._notreal, stuff = [], {pytestmark_decl}, 123
+
+                        def test_stuff(self):
+                            pass
+                '''
+                    )
 
     class ContextModule:
         class ContextWithOnlyMark:
@@ -175,6 +188,21 @@ class BaseLintTest(CommonSubjectTestMixin):
                     import pytest
 
                     pytestmark = stuff = {pytestmark_decl}
+
+                    class TestMyStuff:
+                        def test_stuff(self):
+                            pass
+
+                    def test_other_stuff():
+                        pass
+                ''')
+
+            class CaseChainedAssignWithUnpackAssign(IncludesUnexpectedFocused):
+                # language=py
+                source = lambda_fixture(lambda pytestmark_decl: f'''
+                    import pytest
+
+                    pytest._notreal, [pytestmark, stuff] = 'abc', [{pytestmark_decl}, 123]
 
                     class TestMyStuff:
                         def test_stuff(self):
