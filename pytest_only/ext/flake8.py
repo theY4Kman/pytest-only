@@ -122,13 +122,15 @@ def iter_assign_targets_values(
     for target in targets:
         if hasattr(target, "elts"):
             if hasattr(value, "elts"):
-                # zip() is safe because the interpreter will raise an exception if
+                # zip() is safe because the interpreter should raise an exception if
                 # there are too few or too many values to unpack
                 for nested_target, nested_value in zip(target.elts, value.elts):
                     yield from iter_assign_targets_values([nested_target], nested_value)
             else:
-                # This is not valid python, cannot unpack non-iterable
-                # We'll let the interpreter handle this
+                # This is probably not valid python "cannot unpack non-iterable"
+                # It's also possible this case could be hit by someone unpacking
+                # a different type of iterable object, and it is beyond the scope of
+                # this extension to attempt to evaluate such cases.
                 pass
         else:
             yield target, value
