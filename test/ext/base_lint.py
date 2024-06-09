@@ -183,11 +183,16 @@ class BaseLintTest(CommonSubjectTestMixin):
                 ''')
 
             class CaseChainedAssign(IncludesUnexpectedFocused):
+                assignments = lambda_fixture(params=[
+                    pytest.param(('pytestmark', 'stuff'), id='pytestmark-first'),
+                    pytest.param(('stuff', 'pytestmark'), id='pytestmark-last'),
+                ])
+
                 # language=py
-                source = lambda_fixture(lambda pytestmark_decl: f'''
+                source = lambda_fixture(lambda pytestmark_decl, assignments: f'''
                     import pytest
 
-                    pytestmark = stuff = {pytestmark_decl}
+                    {" = ".join(assignments)} = {pytestmark_decl}
 
                     class TestMyStuff:
                         def test_stuff(self):
