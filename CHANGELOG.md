@@ -6,6 +6,8 @@ and this project adheres to [Semantic Versioning](http://semver.org/spec/v2.0.0.
 
 
 ## [Unreleased]
+### Fixed
+ - Fix for [flake8](https://github.com/PyCQA/flake8) plugin exception on chained assignments (thank you, [@jack-zins](https://github.com/jack-zins) – [GH#13](https://github.com/theY4Kman/pytest-only/pull/13))
 
 
 ## [2.1.2] — 2024-05-27

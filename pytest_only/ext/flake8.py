@@ -110,18 +110,27 @@ def iter_only_mark_pytestmarks(
 
 def get_pytestmark_assign_value(stmt: ast.stmt) -> Optional[ast.expr]:
     if isinstance(stmt, ast.Assign):
-        if len(stmt.targets) == 1:
-            if hasattr(stmt.targets[0], 'elts'):
-                targets = stmt.targets[0].elts
-                values = getattr(stmt.value, 'elts', None)
-                if values is None:
-                    values = (stmt.value,) * len(targets)
-            else:
-                targets = stmt.targets
-                values = (stmt.value,)
-        else:
-            raise AssertionError('when does this happen?')
-
-        for target, value in zip(targets, values):
+        for target, value in iter_assign_targets_values(stmt.targets, stmt.value):
             if isinstance(target, ast.Name) and target.id == 'pytestmark':
                 return value
+
+
+def iter_assign_targets_values(
+    targets: List[ast.expr],
+    value: Union[ast.expr, ast.List],
+) -> Tuple[ast.expr, Union[ast.expr, ast.List]]:
+    for target in targets:
+        if hasattr(target, "elts"):
+            if hasattr(value, "elts"):
+                # zip() is safe because the interpreter should raise an exception if
+                # there are too few or too many values to unpack
+                for nested_target, nested_value in zip(target.elts, value.elts):
+                    yield from iter_assign_targets_values([nested_target], nested_value)
+            else:
+                # This is probably not valid python "cannot unpack non-iterable"
+                # It's also possible this case could be hit by someone unpacking
+                # a different type of iterable object, and it is beyond the scope of
+                # this extension to attempt to evaluate such cases.
+                pass
+        else:
+            yield target, value

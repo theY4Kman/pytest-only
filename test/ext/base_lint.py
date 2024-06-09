@@ -127,15 +127,28 @@ class BaseLintTest(CommonSubjectTestMixin):
                             pass
                 ''')
 
-        class ContextWithoutOnlyMark(DoesNotIncludeUnexpectedFocused):
-            # language=py
-            source = static_fixture('''
-                class TestMyStuff:
-                    apples = 'pears'
+        class ContextWithoutOnlyMark:
+            class CaseNormal(DoesNotIncludeUnexpectedFocused):
+                # language=py
+                source = static_fixture('''
+                    class TestMyStuff:
+                        apples = 'pears'
+    
+                        def test_stuff(self):
+                            pass
+                ''')
 
-                    def test_stuff(self):
-                        pass
-            ''')
+            class CaseOnlyMarkUnpackAssignOther(DoesNotIncludeUnexpectedFocused):
+                # language=py
+                source = static_fixture(
+                    '''
+                    class TestMyStuff:
+                        pytestmark, pytest._notreal, stuff = [], {pytestmark_decl}, 123
+
+                        def test_stuff(self):
+                            pass
+                '''
+                    )
 
     class ContextModule:
         class ContextWithOnlyMark:
@@ -169,6 +182,71 @@ class BaseLintTest(CommonSubjectTestMixin):
                         pass
                 ''')
 
+            class CaseNestedUnpackAssign(IncludesUnexpectedFocused):
+                # language=py
+                source = lambda_fixture(lambda pytestmark_decl: f'''
+                    import pytest
+
+                    pytest._notreal, [pytestmark, _], stuff = 'abc', [{pytestmark_decl}, None], 123
+
+                    class TestMyStuff:
+                        def test_stuff(self):
+                            pass
+
+                    def test_other_stuff():
+                        pass
+                ''')
+
+            class CaseChainedAssign(IncludesUnexpectedFocused):
+                assignments = lambda_fixture(params=[
+                    pytest.param(('pytestmark', 'stuff'), id='pytestmark-first'),
+                    pytest.param(('stuff', 'pytestmark'), id='pytestmark-last'),
+                ])
+
+                # language=py
+                source = lambda_fixture(lambda pytestmark_decl, assignments: f'''
+                    import pytest
+
+                    {" = ".join(assignments)} = {pytestmark_decl}
+
+                    class TestMyStuff:
+                        def test_stuff(self):
+                            pass
+
+                    def test_other_stuff():
+                        pass
+                ''')
+
+            class CaseChainedAssignWithUnpackAssign(IncludesUnexpectedFocused):
+                # language=py
+                source = lambda_fixture(lambda pytestmark_decl: f'''
+                    import pytest
+
+                    pytest._notreal, [pytestmark, stuff] = 'abc', [{pytestmark_decl}, 123]
+
+                    class TestMyStuff:
+                        def test_stuff(self):
+                            pass
+
+                    def test_other_stuff():
+                        pass
+                ''')
+
+            class CaseChainedAssignWithNestedUnpackAssign(IncludesUnexpectedFocused):
+                # language=py
+                source = lambda_fixture(lambda pytestmark_decl: f'''
+                    import pytest
+
+                    pytest._notreal, [[pytestmark, _], stuff] = 'abc', [[{pytestmark_decl}, None], 123]
+
+                    class TestMyStuff:
+                        def test_stuff(self):
+                            pass
+
+                    def test_other_stuff():
+                        pass
+                ''')
+
         class ContextWithoutOnlyMark(DoesNotIncludeUnexpectedFocused):
             # language=py
             source = static_fixture('''
@@ -192,6 +270,13 @@ class BaseLintTest(CommonSubjectTestMixin):
             a, *b, c = range(3)
             a, b, c = range(3)
             [a, b, c] = range(3)
+            
+            # Chained assignment should not cause errors
+            a = b = 3
+            a = b, c = (0, 1)
+            a = b, *c = (0, 1)
+            a = [b, c] = (0, 1)
+            a = [b, [c, d]], (0, (1, 2))
 
             # Decorators of all kinds should not cause errors
             @staticmethod
