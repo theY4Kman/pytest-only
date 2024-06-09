@@ -182,6 +182,21 @@ class BaseLintTest(CommonSubjectTestMixin):
                         pass
                 ''')
 
+            class CaseNestedUnpackAssign(IncludesUnexpectedFocused):
+                # language=py
+                source = lambda_fixture(lambda pytestmark_decl: f'''
+                    import pytest
+
+                    pytest._notreal, [pytestmark, _], stuff = 'abc', [{pytestmark_decl}, None], 123
+
+                    class TestMyStuff:
+                        def test_stuff(self):
+                            pass
+
+                    def test_other_stuff():
+                        pass
+                ''')
+
             class CaseChainedAssign(IncludesUnexpectedFocused):
                 assignments = lambda_fixture(params=[
                     pytest.param(('pytestmark', 'stuff'), id='pytestmark-first'),
@@ -208,6 +223,21 @@ class BaseLintTest(CommonSubjectTestMixin):
                     import pytest
 
                     pytest._notreal, [pytestmark, stuff] = 'abc', [{pytestmark_decl}, 123]
+
+                    class TestMyStuff:
+                        def test_stuff(self):
+                            pass
+
+                    def test_other_stuff():
+                        pass
+                ''')
+
+            class CaseChainedAssignWithNestedUnpackAssign(IncludesUnexpectedFocused):
+                # language=py
+                source = lambda_fixture(lambda pytestmark_decl: f'''
+                    import pytest
+
+                    pytest._notreal, [[pytestmark, _], stuff] = 'abc', [[{pytestmark_decl}, None], 123]
 
                     class TestMyStuff:
                         def test_stuff(self):
